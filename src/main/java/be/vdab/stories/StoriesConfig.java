@@ -1,7 +1,8 @@
 package be.vdab.stories;
 
-import be.vdab.stories.github.GithubService;
-import be.vdab.stories.github.endpoint.GithubWrapper;
+import be.vdab.stories.git.GitService;
+import be.vdab.stories.git.endpoint.github.GithubWrapper;
+import be.vdab.stories.git.endpoint.gitlab.GitlabWrapper;
 import be.vdab.stories.jira.JiraService;
 import be.vdab.stories.jira.endpoint.JiraWrapper;
 import org.glassfish.jersey.servlet.ServletContainer;
@@ -25,12 +26,15 @@ public class StoriesConfig {
     }
 
     @Bean
-    public GithubService githubService(@Value("${github.user:''}") String githubUser,
-                                       @Value("${github.repo:''}") String githubRepo,
-                                       @Value("${github.latest.commit:''}") String githubLatestCommit,
-                                       @Value("${github.authorization.token:''}") String authorizationToken,
-                                       GithubWrapper githubWrapper) {
-        return new GithubService(githubUser, githubRepo, githubLatestCommit, authorizationToken, githubWrapper);
+    public GitService githubService(@Value("${git.repo:''}") String githubRepo,
+                                    @Value("${git.latest.commit:''}") String githubLatestCommit,
+                                    @Value("${git.authorization.token:''}") String authorizationToken,
+                                    @Value("${git.isGithub:true") boolean isGithub,
+                                    GithubWrapper githubWrapper, GitlabWrapper gitlabWrapper) {
+        if(isGithub){
+            return new GitService(githubRepo, githubLatestCommit, authorizationToken, githubWrapper);
+        }
+        return new GitService(githubRepo, githubLatestCommit, authorizationToken, gitlabWrapper);
     }
 
     @Bean
@@ -48,7 +52,7 @@ public class StoriesConfig {
     public JiraService jiraService(
             @Value("${jira.project.label:''}") String projectLabel,
             JiraWrapper jiraWrapper,
-            GithubService githubService) {
-        return new JiraService(projectLabel, jiraWrapper, githubService);
+            GitService gitService) {
+        return new JiraService(projectLabel, jiraWrapper, gitService);
     }
 }

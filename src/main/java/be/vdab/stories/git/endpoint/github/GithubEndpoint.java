@@ -1,7 +1,4 @@
-package be.vdab.stories.github.endpoint;
-
-import be.vdab.stories.github.domain.GithubCommit;
-import be.vdab.stories.github.domain.GithubRelease;
+package be.vdab.stories.git.endpoint.github;
 
 import javax.ws.rs.*;
 import java.util.List;

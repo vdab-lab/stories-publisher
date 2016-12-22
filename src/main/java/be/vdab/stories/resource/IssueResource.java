@@ -19,9 +19,16 @@ public class IssueResource {
     private JiraService jiraService;
 
     @GET
+    @Path("/sinceLastRelease")
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<JiraIssue> getBuildNumber(){
-        return jiraService.getJiraIssuesSinceLastCommit();
+    public Set<JiraIssue> getAllSinceLastRelease(){
+        return jiraService.getJiraIssuesSinceLastRelease();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<JiraIssue> getAllIssues(){
+        return jiraService.getAllJiraIssues();
     }
 
 }
