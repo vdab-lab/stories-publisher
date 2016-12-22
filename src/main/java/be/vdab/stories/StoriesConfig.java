@@ -39,8 +39,9 @@ public class StoriesConfig {
     }
 
     @Bean
-    public JiraWrapper jiraWrapper(@Value("${jira.url:''}") String jiraUrl) {
-        return new JiraWrapper(jiraUrl);
+    public JiraWrapper jiraWrapper(@Value("${jira.url:''}") String jiraUrl,
+                                   @Value("${jira.authorization.token}") String authorizationToken) {
+        return new JiraWrapper(jiraUrl, authorizationToken);
     }
 
     @Bean

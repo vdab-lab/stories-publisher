@@ -10,13 +10,15 @@ import javax.ws.rs.client.WebTarget;
 @Named
 public class JiraWrapper {
     private JiraEndpoint endpoint;
+    private final String authorizationToken;
 
-    public JiraWrapper(String backendUrl) {
-        endpoint = WebResourceFactory.newResource(JiraEndpoint.class, restClient(backendUrl));
+    public JiraWrapper(String backendUrl, String authorizationToken) {
+        this.endpoint = WebResourceFactory.newResource(JiraEndpoint.class, restClient(backendUrl));
+        this.authorizationToken = authorizationToken;
     }
 
     public JiraIssue getIssue(String issueName) {
-        return endpoint.getIssue(issueName, "Basic VFZFUkNSVVk6VGlWZTI2MDIyMDE1");
+        return endpoint.getIssue(issueName, String.format("Basic %s", authorizationToken));
     }
 
 
