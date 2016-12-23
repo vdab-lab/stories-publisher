@@ -9,11 +9,9 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan
 public class StoriesConfig {
 
     @Bean
@@ -26,10 +24,10 @@ public class StoriesConfig {
     }
 
     @Bean
-    public GitService githubService(@Value("${git.repo:''}") String githubRepo,
+    public GitService githubService(@Value("${git.repository:''}") String githubRepo,
                                     @Value("${git.latest.commit:''}") String githubLatestCommit,
                                     @Value("${git.authorization.token:''}") String authorizationToken,
-                                    @Value("${git.isGithub:true") boolean isGithub,
+                                    @Value("${git.isGithub:true}") boolean isGithub,
                                     GithubWrapper githubWrapper, GitlabWrapper gitlabWrapper) {
         if(isGithub){
             return new GitService(githubRepo, githubLatestCommit, authorizationToken, githubWrapper);
@@ -38,21 +36,23 @@ public class StoriesConfig {
     }
 
     @Bean
-    public GithubWrapper githubWrapper(@Value("${github.url:''}") String githubUrl) {
+    public GithubWrapper githubWrapper(@Value("${git.url:''}") String githubUrl) {
         return new GithubWrapper(githubUrl);
     }
 
     @Bean
+    public GitlabWrapper gitlabWrapper(@Value("${git.url:''}") String githubUrl) {
+        return new GitlabWrapper(githubUrl);
+    }
+
+    @Bean
     public JiraWrapper jiraWrapper(@Value("${jira.url:''}") String jiraUrl,
-                                   @Value("${jira.authorization.token}") String authorizationToken) {
+                                   @Value("${jira.authorization.token:''}") String authorizationToken) {
         return new JiraWrapper(jiraUrl, authorizationToken);
     }
 
     @Bean
-    public JiraService jiraService(
-            @Value("${jira.project.label:''}") String projectLabel,
-            JiraWrapper jiraWrapper,
-            GitService gitService) {
-        return new JiraService(projectLabel, jiraWrapper, gitService);
+    public JiraService jiraService(JiraWrapper jiraWrapper, GitService gitService) {
+        return new JiraService(jiraWrapper, gitService);
     }
 }

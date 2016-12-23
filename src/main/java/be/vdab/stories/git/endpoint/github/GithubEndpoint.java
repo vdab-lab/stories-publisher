@@ -1,6 +1,7 @@
 package be.vdab.stories.git.endpoint.github;
 
 import javax.ws.rs.*;
+import java.util.Date;
 import java.util.List;
 
 public interface GithubEndpoint {
@@ -14,7 +15,8 @@ public interface GithubEndpoint {
             @PathParam("user") String user,
             @PathParam("repo") String repo,
             @QueryParam("page") int page,
-            @QueryParam("per_page") int perPage
+            @QueryParam("per_page") int perPage,
+            @QueryParam("since") Date since
     );
 
     @GET
@@ -25,7 +27,7 @@ public interface GithubEndpoint {
             @HeaderParam("Authorization") String authorization,
             @PathParam("user") String user,
             @PathParam("repo") String repo,
-            @QueryParam("page") int page,
-            @QueryParam("per_page") int perPage
+            @QueryParam("per_page") int perPage,
+            @QueryParam("since") Date since
     );
 }

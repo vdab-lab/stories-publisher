@@ -22,7 +22,6 @@ public interface GitlabEndpoint {
     List<GitlabTag> getTags(
             @HeaderParam("PRIVATE-TOKEN") String authorization,
             @PathParam("repoName") String repoName,
-            @QueryParam("page") int page,
             @QueryParam("per_page") int perPage
     );
 }

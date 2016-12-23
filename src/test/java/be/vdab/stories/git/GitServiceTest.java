@@ -1,6 +1,5 @@
 package be.vdab.stories.git;
 
-import be.vdab.stories.git.GitService;
 import be.vdab.stories.git.domain.GitCommit;
 import be.vdab.stories.git.domain.GitRequest;
 import be.vdab.stories.git.endpoint.github.GithubWrapper;
@@ -20,6 +19,7 @@ import java.util.List;
 
 import static be.vdab.stories.git.domain.GitCommit.aGitCommit;
 import static be.vdab.stories.git.domain.GitRelease.aGitRelease;
+import static org.mockito.Matchers.eq;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GitServiceTest {
@@ -32,13 +32,13 @@ public class GitServiceTest {
 
     @Before
     public void setup() {
-        Mockito.when(githubWrapper.getReleases(Matchers.any(GitRequest.class), Matchers.eq(1)))
+        Mockito.when(githubWrapper.getReleases(Matchers.any(GitRequest.class)))
                 .thenReturn(
                         Lists.newArrayList(
                                 aGitRelease("", aGitCommit("sha3")),
                                 aGitRelease("", aGitCommit("sha3"))
                         ));
-        Mockito.when(githubWrapper.getCommits(Matchers.any(GitRequest.class), Matchers.eq(1)))
+        Mockito.when(githubWrapper.getCommits(Matchers.any(GitRequest.class), eq(1)))
                 .thenReturn(
                         Lists.newArrayList(
                                 aGitCommit("sha1"),

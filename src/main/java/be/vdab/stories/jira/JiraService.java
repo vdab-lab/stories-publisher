@@ -6,49 +6,43 @@ import be.vdab.stories.git.domain.GitCommit;
 import be.vdab.stories.jira.domain.JiraIssue;
 import be.vdab.stories.jira.endpoint.JiraWrapper;
 
-import javax.inject.Named;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toSet;
-
-@Named
 public class JiraService {
 
-    private Pattern pattern;
+    private Pattern pattern = Pattern.compile("(?s)(.*)([A-Z]{3}-\\d+)(.*)");
     private JiraWrapper endpoint;
     private GitService gitService;
-    private String projectLabel;
 
-    public JiraService(String projectLabel, JiraWrapper endpoint, GitService gitService){
-        this.projectLabel = projectLabel;
+    public JiraService(JiraWrapper endpoint, GitService gitService) {
         this.endpoint = endpoint;
         this.gitService = gitService;
-        this.pattern = Pattern.compile(String.format("(?s)(.*)(%s-\\d+)(.*)", projectLabel));
     }
 
-    public Set<JiraIssue> getJiraIssuesSinceLastRelease() {
+    public List<JiraIssue> getJiraIssuesSinceLastRelease() {
         return filterAllIssues(gitService.getCommitsSinceLastReleaseUntilLatestCommit());
     }
 
-    public Set<JiraIssue> getAllJiraIssues(){
-        return filterAllIssues(gitService.getAllCommits());
+    public List<JiraIssue> getAllJiraIssues(Date since) {
+        return filterAllIssues(gitService.getAllCommits(since));
     }
 
-    private Set<JiraIssue> filterAllIssues(List<GitCommit> commits){
-        return commits
+    private List<JiraIssue> filterAllIssues(List<GitCommit> commits) {
+        String issues = commits
                 .stream()
                 .map(GitCommit::getMessage)
-                .filter(message -> message.contains(projectLabel))
+                .filter(pattern.asPredicate())
                 .map(message -> {
                     Matcher matcher = pattern.matcher(message);
                     matcher.matches();
                     return matcher.group(2);
                 })
-                .map(issue -> endpoint.getIssue(issue))
-                .collect(toSet());
+                .distinct()
+                .collect(Collectors.joining(", "));
+        return endpoint.searchIssues(String.format("key in (%s)", issues)).issues;
     }
 }

@@ -1,6 +1,7 @@
 package be.vdab.stories.jira.endpoint;
 
 import be.vdab.stories.jira.domain.JiraIssue;
+import be.vdab.stories.jira.domain.JiraQuery;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 
 import javax.inject.Named;
@@ -21,6 +22,10 @@ public class JiraWrapper {
         return endpoint.getIssue(issueName, String.format("Basic %s", authorizationToken));
     }
 
+
+    public JiraQuery searchIssues(String query) {
+        return endpoint.search(query, String.format("Basic %s", authorizationToken));
+    }
 
     private WebTarget restClient(String backendUrl) {
         return ClientBuilder.newClient()

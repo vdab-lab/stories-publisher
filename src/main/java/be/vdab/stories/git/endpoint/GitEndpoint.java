@@ -10,5 +10,5 @@ import java.util.List;
 public interface GitEndpoint {
 
     List<GitCommit> getCommits(GitRequest gitRequest, int page);
-    List<GitRelease> getReleases(GitRequest gitRequest, int page);
+    List<GitRelease> getReleases(GitRequest gitRequest);
 }
