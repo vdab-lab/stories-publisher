@@ -22,6 +22,7 @@
 
 package be.vdab.stories;
 
+import be.vdab.stories.resource.IssueResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 
@@ -29,7 +30,7 @@ import org.glassfish.jersey.server.ServerProperties;
 public class JerseyStoriesConfig extends ResourceConfig {
 
     public JerseyStoriesConfig() {
-        packages(getClass().getPackage().toString());
+        register(IssueResource.class);
         property(ServerProperties.WADL_FEATURE_DISABLE, true);
     }
 
