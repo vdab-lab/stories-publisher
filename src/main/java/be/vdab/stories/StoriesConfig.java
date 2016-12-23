@@ -24,9 +24,9 @@ public class StoriesConfig {
     }
 
     @Bean
-    public GitService githubService(@Value("${git.repository:''}") String githubRepo,
-                                    @Value("${git.latest.commit:''}") String githubLatestCommit,
-                                    @Value("${git.authorization.token:''}") String authorizationToken,
+    public GitService githubService(@Value("${git.repository}") String githubRepo,
+                                    @Value("${git.latest.commit}") String githubLatestCommit,
+                                    @Value("${git.authorization.token}") String authorizationToken,
                                     @Value("${git.isGithub:true}") boolean isGithub,
                                     GithubWrapper githubWrapper, GitlabWrapper gitlabWrapper) {
         if(isGithub){
@@ -36,18 +36,18 @@ public class StoriesConfig {
     }
 
     @Bean
-    public GithubWrapper githubWrapper(@Value("${git.url:''}") String githubUrl) {
+    public GithubWrapper githubWrapper(@Value("${git.url}") String githubUrl) {
         return new GithubWrapper(githubUrl);
     }
 
     @Bean
-    public GitlabWrapper gitlabWrapper(@Value("${git.url:''}") String githubUrl) {
+    public GitlabWrapper gitlabWrapper(@Value("${git.url}") String githubUrl) {
         return new GitlabWrapper(githubUrl);
     }
 
     @Bean
-    public JiraWrapper jiraWrapper(@Value("${jira.url:''}") String jiraUrl,
-                                   @Value("${jira.authorization.token:''}") String authorizationToken) {
+    public JiraWrapper jiraWrapper(@Value("${jira.url}") String jiraUrl,
+                                   @Value("${jira.authorization.token}") String authorizationToken) {
         return new JiraWrapper(jiraUrl, authorizationToken);
     }
 
